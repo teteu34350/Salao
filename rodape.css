@@ -1,0 +1,16 @@
+#rodape {
+    background-color: violet;
+    width: 100%;
+    height: 125px;
+    margin-top: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#rodape img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50px;
+    padding: 20px;    
+}

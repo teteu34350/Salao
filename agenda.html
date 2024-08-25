@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendamento - Salão de Manicure</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .form-container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        p {
+            font-size: 16px;
+            margin-bottom: 20px;
+            color: #666;
+            text-align: center;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="time"],
+        input[type="date"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        fieldset {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+
+        legend {
+            font-weight: bold;
+            color: #555;
+        }
+
+        .checkbox-group label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        .error-message {
+            color: red;
+            margin-top: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Agende Seu Atendimento</h1>
+        <p>Bem-vindo ao nosso salão de manicure! Preencha o formulário abaixo para agendar seu atendimento. Escolha os serviços que deseja e selecione o dia e horário mais convenientes para você.</p>
+        <form id="whatsapp-form">
+            <label for="name">Nome Completo:</label>
+            <input type="text" id="name" name="name" placeholder="Seu nome completo" required>
+
+            <label for="appointment-time">Horário Preferido:</label>
+            <input type="time" id="appointment-time" name="appointment-time" required>
+
+            <fieldset>
+                <legend>Serviços Desejados:</legend>
+                <div class="checkbox-group">
+                    <label>
+                        <input type="checkbox" name="services" value="Unha em Gel">
+                        Unha em Gel
+                    </label>
+                    <label>
+                        <input type="checkbox" name="services" value="Alongamento">
+                        Alongamento
+                    </label>
+                    <label>
+                        <input type="checkbox" name="services" value="Manutenção">
+                        Manutenção
+                    </label>
+                    <label>
+                        <input type="checkbox" name="services" value="Tratamento para os Pés">
+                        Tratamento para os Pés
+                    </label>
+                    <label>
+                        <input type="checkbox" name="services" value="Tratamento para as Mãos">
+                        Tratamento para as Mãos
+                    </label>
+                </div>
+            </fieldset>
+
+            <label for="appointment-day">Dia do Agendamento:</label>
+            <input type="date" id="appointment-day" name="appointment-day" required>
+
+            <button type="submit">Confirmar Agendamento</button>
+            <div id="error-message" class="error-message"></div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('whatsapp-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Evita o envio padrão do formulário
+
+            var name = document.getElementById('name').value;
+            var time = document.getElementById('appointment-time').value;
+            var date = document.getElementById('appointment-day').value;
+            var errorMessage = document.getElementById('error-message');
+
+            // Verifica se o horário está dentro do intervalo permitido (06:00 - 19:00)
+            var hours = parseInt(time.split(':')[0], 10);
+            if (hours < 6 || hours >= 19) {
+                errorMessage.textContent = 'Horário inválido. Por favor, escolha um horário entre 06:00 e 19:00.';
+                return;
+            } else {
+                errorMessage.textContent = ''; // Limpa a mensagem de erro
+            }
+
+            // Captura os serviços selecionados
+            var services = [];
+            var serviceElements = document.querySelectorAll('.checkbox-group input[type="checkbox"]:checked');
+            serviceElements.forEach(function(service) {
+                var label = service.parentElement; // Obtém o elemento <label> pai
+                if (label) {
+                    services.push(label.textContent.trim()); // Captura o texto do rótulo
+                }
+            });
+
+            var serviceText = services.join(', '); // Junta os serviços selecionados em uma string
+
+            // Número do WhatsApp para onde a mensagem será enviada
+            var phoneNumber = '5535998710375'; // Certifique-se de usar o formato internacional, incluindo o código do país
+
+            // Mensagem predefinida
+            var predefinedMessage = `Olá, meu nome é ${name}. Gostaria de agendar um horário para ${serviceText} no dia ${date} às ${time}.`;
+
+            // Codifica a URL para que funcione corretamente com caracteres especiais
+            var url = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(predefinedMessage)}`;
+
+            // Redireciona o usuário para o WhatsApp
+            window.location.href = url; // Garante que a URL seja aberta na mesma aba
+        });
+    </script>
+</body>
+</html>

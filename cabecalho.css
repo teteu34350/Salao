@@ -1,0 +1,15 @@
+#cabecalho {
+    background-color: violet;
+    width: 100%;
+    height: 150px;
+    /* CENTRALIZANDO LOGO NO MEIO DO CABEÇALHO */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#IMG-LOGO{
+    width: 155px;
+    height: 135px;
+    /* NÃO DEIXA A IMAGEM ULTRAPASSA O CABECALHO */
+    max-width: 100%; 
+}
